@@ -29,7 +29,7 @@ import java.io.File
 import java.util.Date
 import java.util.UUID
 
-private const val DATE_FORMAT = "EEE, MMM, dd yyyy"
+private const val DATE_FORMAT = "EEE, MMM dd, yyyy"
 private const val TIME_FORMAT = "hh:mm a zzz"
 
 class CrimeDetailFragment: Fragment() {
