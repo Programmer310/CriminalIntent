@@ -29,7 +29,9 @@ import java.io.File
 import java.util.Date
 import java.util.UUID
 
-private const val DATE_FORMAT = "EEE, MMM, dd"
+private const val DATE_FORMAT = "EEE, MMM, dd yyyy"
+private const val TIME_FORMAT = "hh:mm a zzz"
+
 class CrimeDetailFragment: Fragment() {
 
     private var _binding: FragmentCrimeDetailBinding? = null
@@ -133,6 +135,14 @@ class CrimeDetailFragment: Fragment() {
                 bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
             crimeDetailViewModel.updateCrime { it.copy(date = newDate) }
         }
+
+        setFragmentResultListener(
+            TimePickerFragment.REQUEST_KEY_TIME
+        ) { _, bundle ->
+            val newTime =
+                bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
+            crimeDetailViewModel.updateCrime { it.copy(date = newTime) }
+        }
     }
 
     override fun onDestroyView() {
@@ -146,7 +156,7 @@ class CrimeDetailFragment: Fragment() {
                 crimeTitle.setText(crime.title)
             }
 
-            crimeDate.text = crime.date.toString()
+            crimeDate.text = DateFormat.format(DATE_FORMAT, crime.date).toString()
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections.selectDate(crime.date)
@@ -177,6 +187,13 @@ class CrimeDetailFragment: Fragment() {
             }
 
             updatePhoto(crime.photoFileName)
+
+            crimeTime.text = DateFormat.format(TIME_FORMAT, crime.date).toString()
+            crimeTime.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections.selectTime(crime.date)
+                )
+            }
         }
     }
 
