@@ -8,6 +8,9 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.format.DateFormat
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -25,6 +28,7 @@ import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.criminalintent.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.selects.select
 import java.io.File
 import java.util.Date
 import java.util.UUID
@@ -63,6 +67,11 @@ class CrimeDetailFragment: Fragment() {
     }
 
     private var photoName: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -148,6 +157,21 @@ class CrimeDetailFragment: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_crime_detail, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_crime -> {
+                deleteSelectedCrime()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun updateUi(crime: Crime) {
@@ -264,6 +288,15 @@ class CrimeDetailFragment: Fragment() {
                 binding.crimePhoto.setImageBitmap(null)
                 binding.crimePhoto.tag = null
             }
+        }
+    }
+
+    private fun deleteSelectedCrime() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            crimeDetailViewModel.deleteCrime(args.crimeId)
+            findNavController().navigate(
+                CrimeDetailFragmentDirections.backToList()
+            )
         }
     }
 }

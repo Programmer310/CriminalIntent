@@ -40,6 +40,10 @@ class CrimeRepository private constructor(
         database.crimeDao().addCrime(crime)
     }
 
+    suspend fun deleteCrime(id: UUID) {
+        database.crimeDao().deleteCrime(getCrime(id))
+    }
+
     companion object {
         private var INSTANCE: CrimeRepository? = null
 
