@@ -16,17 +16,18 @@ class TimePickerFragment : DialogFragment() {
     private val args: TimePickerFragmentArgs by navArgs()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val calender = Calendar.getInstance()
+
         val timeListener = TimePickerDialog.OnTimeSetListener {
                 _: TimePicker, hour: Int, minute: Int ->
 
-            val resultTime = dateWithCustomTime(hour, minute)
+            val resultTime = dateWithCustomTime(calender, hour, minute)
 
             setFragmentResult(REQUEST_KEY_TIME,
                 bundleOf(BUNDLE_KEY_TIME to resultTime)
             )
         }
 
-        val calender = Calendar.getInstance()
         calender.time = args.crimeTime
         val initialHour = calender.get(Calendar.HOUR_OF_DAY)
         val initialMin = calender.get(Calendar.MINUTE)
@@ -40,8 +41,7 @@ class TimePickerFragment : DialogFragment() {
         )
     }
 
-    private fun dateWithCustomTime(hour: Int, minute: Int): Date {
-        val calendar = Calendar.getInstance()
+    private fun dateWithCustomTime(calendar: Calendar, hour: Int, minute: Int): Date {
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
         return calendar.time
