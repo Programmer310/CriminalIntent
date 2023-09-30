@@ -112,7 +112,7 @@ class CrimeDetailFragment: Fragment() {
             crimeCamera.setOnClickListener {
                 photoName = "IMG_${Date()}.JPG"
                 val photoFile = File(requireContext().applicationContext.filesDir,
-                                    photoName)
+                    photoName)
                 val photoUri = FileProvider.getUriForFile(
                     requireContext(),
                     "com.bignerdranch.android.criminalintent.fileprovider",
